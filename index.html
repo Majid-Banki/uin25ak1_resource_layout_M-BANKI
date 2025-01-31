@@ -1,98 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tabbed Interface</title>
-    <link rel="stylesheet" href="/css/style.css" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Resource Interface</title>
+    <link rel="stylesheet" href="/css/style.css">
     <script type="module">
-      import { resources } from "./ressurs.js"
+        // Importerer ressursdata fra en ekstern JavaScript-fil
+        import { resources } from "./ressurs.js";
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const tabsContainer = document.querySelector("nav")
-        const contentContainer = document.querySelector("section")
+        // Venter til DOM-en er fullstendig lastet før skriptet kjører
+        document.addEventListener("DOMContentLoaded", () => {
+            // Henter referanser til hovedcontainerne i DOM-en
+            const navElement = document.getElementById("categoryNav");
+            const contentElement = document.getElementById("resourceContent");
 
-        // Create Tabs using map()
-        function createTabs() {
-          const uniqueCategories = [
-            ...new Set(resources.map((res) => res.category)),
-          ] // Extract unique categories
+            // Funksjon for å opprette en kategoriknapp
+            function createButton(category, isActive) {
+                const button = document.createElement("button");
+                // Setter klasser for styling, med 'current' for den aktive knappen
+                button.className = `tab-button${isActive ? " current" : ""}`;
+                button.textContent = category;
+                // Legger til en onclick-hendelse for å oppdatere innholdet når knappen klikkes
+                button.onclick = () => updateContent(category, button);
+                return button;
+            }
 
-          uniqueCategories.map((category, index) => {
-            const tab = document.createElement("button")
-            tab.classList.add("tab")
-            tab.textContent = category
-            tab.dataset.tab = category.toLowerCase().replace(/\s+/g, "-")
+            // Funksjon for å opprette et ressurselement
+            function createResourceElement(item) {
+                const article = document.createElement("article");
+                article.className = "tab-content visible";
+                // Bruker template literals for å sette inn HTML-innhold
+                article.innerHTML = `
+                    <h2>${item.category}</h2>
+                    <p>${item.text}</p>
+                    <ul>
+                        ${item.sources.map(source => `
+                            <li><a href="${source.url}" target="_blank">${source.title}</a></li>
+                        `).join('')}
+                    </ul>
+                `;
+                return article;
+            }
 
-            if (index === 0) tab.classList.add("active") // Default active tab
+            // Funksjon for å oppdatere innholdet basert på valgt kategori
+            function updateContent(category, activeButton) {
+                // Fjerner 'current' klassen fra alle knapper og legger den til på den aktive
+                navElement.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("current"));
+                activeButton.classList.add("current");
+                
+                // Tømmer innholdscontaineren
+                contentElement.innerHTML = "";
+                // Filtrerer ressursene basert på valgt kategori og legger til nye elementer
+                resources.filter(item => item.category === category)
+                         .forEach(item => contentElement.appendChild(createResourceElement(item)));
+            }
 
-            tabsContainer.appendChild(tab)
-          })
-        }
+            // Henter unike kategorier fra ressursene
+            const categories = [...new Set(resources.map(item => item.category))];
+            // Oppretter knapper for hver kategori
+            categories.forEach((category, index) => 
+                navElement.appendChild(createButton(category, index === 0))
+            );
 
-        // Create Content based on selected category using filter()
-        function createContent(selectedCategory) {
-          contentContainer.innerHTML = "" // Clear previous content
-
-          const filteredResources = resources.filter(
-            (resource) => resource.category === selectedCategory
-          )
-
-          filteredResources.map((resource) => {
-            const article = document.createElement("article")
-            article.classList.add("active") // Display active content
-
-            const heading = document.createElement("h2")
-            heading.textContent = resource.category
-
-            const paragraph = document.createElement("p")
-            paragraph.textContent = resource.text
-
-            const list = document.createElement("ul")
-
-            resource.sources.map((source) => {
-              const listItem = document.createElement("li")
-              const link = document.createElement("a")
-              link.href = source.url
-              link.textContent = source.title
-              link.target = "_blank"
-              listItem.appendChild(link)
-              list.appendChild(listItem)
-            })
-
-            article.appendChild(heading)
-            article.appendChild(paragraph)
-            article.appendChild(list)
-
-            contentContainer.appendChild(article)
-          })
-        }
-
-        // Tab switching using map & filter
-        function setupTabSwitching() {
-          const tabs = document.querySelectorAll(".tab")
-
-          tabs.forEach((tab) => {
-            tab.addEventListener("click", () => {
-              tabs.forEach((t) => t.classList.remove("active")) // Remove active class from all tabs
-              tab.classList.add("active") // Set clicked tab as active
-
-              const selectedCategory = tab.textContent // Get category name
-              createContent(selectedCategory) // Update content
-            })
-          })
-        }
-
-        createTabs()
-        createContent(resources[0].category) // Load first category by default
-        setupTabSwitching()
-      })
+            // Initialiserer grensesnittet med den første kategorien
+            updateContent(categories[0], navElement.firstChild);
+        });
     </script>
-  </head>
-  <body>
+</head>
+<body>
     <main>
-      <nav></nav>
-      <section></section>
+        <!-- Container for navigasjonsknapper -->
+        <nav id="categoryNav"></nav>
+        <!-- Container for ressursinnhold -->
+        <section id="resourceContent"></section>
     </main>
-  </body>
+</body>
 </html>

@@ -1,86 +1,73 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
-
 body {
-  font-family: "Montserrat", sans-serif;
-  margin: 0;
-  background-color: #f0f3fa;
-  display: flex;
-  justify-content: center;
-  min-height: 100vh;
-  padding-top: 8%;
+background-color: #E1E5EE;
+font-family: "Montserrat", sans-serif;
+display: flex;
+justify-content: center;
+min-height: 100vh;
+margin: 0;
+padding-top: 8%;
 }
-
 main {
-  max-width: 1100px;
-  padding: 25px;
+padding: 25px;
+max-width: 1100px;
 }
-
 nav {
-  display: flex;
-  gap: 2%;
-  width: 100%;
+width: 100%;
+display: flex;
+gap: 2%;
 }
-
 .tab-button {
-  flex: 1;
-  padding: 16px 8px;
-  color: #f0f3fa;
-  background: #1f2937;
-  border: none;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 15px;
+background: #2A324B;
+color: #fff;
+border: none;
+cursor: pointer;
+flex: 1;
+font-size: 15px;
+font-weight: 700;
+padding: 16px 8px;
 }
-
 .tab-button:hover {
-  background: #374151;
+background: #58699D;
 }
-
 .tab-button.current {
-  background: #f0f3fa;
-  color: #1f2937;
+color: #2A324B;
+background: #fff;
 }
-
 .content-area {
-  padding: 28px;
-  background: #f0f3fa;
-  color: #1f2937;
+background: #fff;
+color: #2A324B;
+padding: 28px;
 }
-
 .tab-content {
-  display: none;
+display: none;
 }
-
 .tab-content.visible {
-  display: block;
+display: block;
 }
-
 h2 {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 14px;
+color: #2A324B;
+font-size: 20px;
+font-weight: 700;
+margin-bottom: 14px;
 }
-
 p {
-  font-size: 15px;
-  line-height: 1.7;
+color: #2A324B;
+font-size: 15px;
+line-height: 1.7;
 }
-
 ul {
-  padding: 0;
-  list-style-type: none;
+list-style-type: none;
+padding: 0;
 }
-
 ul li {
-  margin: 10px 0;
+margin: 10px 0;
 }
-
 ul li a {
-  text-decoration: none;
-  color: #4b5563;
-  font-weight: 700;
+color: #58699D;
+font-weight: 700;
+text-decoration: none;
 }
-
 ul li a:hover {
-  color: #1f2937;
+color: #2A324B;
 }
